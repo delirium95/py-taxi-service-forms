@@ -63,6 +63,7 @@ class ManufacturerDeleteView(LoginRequiredMixin, DeleteView):
         )
         return context
 
+
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
     paginate_by = 5
