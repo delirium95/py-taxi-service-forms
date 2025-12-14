@@ -1,9 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
-from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import (CreateView,
+                                  UpdateView,
+                                  DeleteView,
+                                  ListView,
+                                  DetailView)
 
 from .models import Driver, Car, Manufacturer
 
@@ -29,7 +32,7 @@ def index(request):
     return render(request, "taxi/index.html", context=context)
 
 
-class ManufacturerListView(LoginRequiredMixin, generic.ListView):
+class ManufacturerListView(LoginRequiredMixin, ListView):
     model = Manufacturer
     context_object_name = "manufacturer_list"
     template_name = "taxi/manufacturer_list.html"
@@ -64,13 +67,13 @@ class ManufacturerDeleteView(LoginRequiredMixin, DeleteView):
         return context
 
 
-class CarListView(LoginRequiredMixin, generic.ListView):
+class CarListView(LoginRequiredMixin, ListView):
     model = Car
     paginate_by = 5
     queryset = Car.objects.all().select_related("manufacturer")
 
 
-class CarDetailView(LoginRequiredMixin, generic.DetailView):
+class CarDetailView(LoginRequiredMixin, DetailView):
     model = Car
 
 
@@ -102,11 +105,11 @@ class CarDeleteView(LoginRequiredMixin, DeleteView):
         return context
 
 
-class DriverListView(LoginRequiredMixin, generic.ListView):
+class DriverListView(LoginRequiredMixin, ListView):
     model = Driver
     paginate_by = 5
 
 
-class DriverDetailView(LoginRequiredMixin, generic.DetailView):
+class DriverDetailView(LoginRequiredMixin, DetailView):
     model = Driver
     queryset = Driver.objects.all().prefetch_related("cars__manufacturer")
