@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView, DeleteView
@@ -55,6 +55,13 @@ class ManufacturerDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("taxi:manufacturer-list")
     template_name = "taxi/manufacturer-delete.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["cancel_url"] = self.request.META.get(
+            "HTTP_REFERER",
+            reverse("taxi:manufacturer-list")
+        )
+        return context
 
 class CarListView(LoginRequiredMixin, generic.ListView):
     model = Car
@@ -84,6 +91,14 @@ class CarDeleteView(LoginRequiredMixin, DeleteView):
     model = Car
     success_url = reverse_lazy("taxi:car-list")
     template_name = "taxi/car-delete.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["cancel_url"] = self.request.META.get(
+            "HTTP_REFERER",
+            reverse("taxi:car-list")
+        )
+        return context
 
 
 class DriverListView(LoginRequiredMixin, generic.ListView):

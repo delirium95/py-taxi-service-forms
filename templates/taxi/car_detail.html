@@ -9,7 +9,7 @@
     <li>{{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})</li>
   {% endfor %}
   </ul>
-    <div style="display: flex; flex-direction: raw; gap: 25px">
+    <div style="display: flex; flex-direction: row; gap: 25px">
         <a href="{% url 'taxi:car-update' pk=car.id %}"
         class="btn btn-primary text-white">
         Update
